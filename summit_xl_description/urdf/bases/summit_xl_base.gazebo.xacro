@@ -18,74 +18,34 @@
 	<!-- skid steering plugin -->
 	<xacro:macro name="skid_steering" params="prefix publish_tf">
     <gazebo>
-      <!-- <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_diff_drive.so"> -->
 	  <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
-			<!--<robotNamespace>/summit_xl</robotNamespace>-->
 		    <odom_publish_frequency>50.0</odom_publish_frequency>
 		    <left_joint>${prefix}front_left_wheel_joint</left_joint>
 		    <right_joint>${prefix}front_right_wheel_joint</right_joint>
 		    <left_joint>${prefix}back_left_wheel_joint</left_joint>
 		    <right_joint>${prefix}back_right_wheel_joint</right_joint>
-		    <!-- wheelSeparation>0.566</wheelSeparation --> <!-- real parameter value -->
+		    <!-- wheel_separation>0.566</wheel_separation --> <!-- real parameter value -->
 		    <wheel_separation>0.462</wheel_separation> <!-- works a bit better in Gazebo -->
 		    <wheel_radius>0.11</wheel_radius>
 		    <child_frame_id>${prefix}base_footprint</child_frame_id>
-		    <!-- <torque>50</torque> -->
-			<ros>
-				<remapping>cmd_vel:=/robotnik_base_control/cmd_vel</remapping>
-         		<remapping>odom:=/robotnik_base_control/odom</remapping>
-			</ros>
+			<topic>/robotnik_base_control/cmd_vel</topic>
+         	<odom_topic>/robotnik_base_control/odom</odom_topic>
 		    <frame_id>${prefix}odom</frame_id>
-		    <broadcastTF>${publish_tf}</broadcastTF>
       </plugin>
     </gazebo>
   </xacro:macro>
 
   <xacro:macro name="omni_steering" params="namespace publish_tf">
 		<gazebo>
-	    <!-- <plugin name="omni_steering" filename="libgazebo_ros_planar_move.so">
-	      <commandTopic>robotnik_base_control/cmd_vel</commandTopic>
-	      <odometryTopic>robotnik_base_control/odom</odometryTopic>
-	      <odometryFrame>${prefix}odom</odometryFrame>
-	      <odometryRate>50.0</odometryRate>
-	      <robotBaseFrame>${prefix}base_footprint</robotBaseFrame>
-	      <publishTF>${publish_tf}</publishTF>
-		  <enableYAxis>true</enableYAxis>
-	    </plugin> -->
-		<plugin name='planar_move' filename='libgazebo_ros_planar_move.so'>
-        <ros>
-          <namespace>${namespace}</namespace>
-		  <remapping>/tf:=tf</remapping>
-          <!-- <remapping>cmd_vel:=robotnik_base_control/cmd_vel</remapping>
-          <remapping>odom:=robotnik_base_control/odom</remapping> -->
-        </ros>
-        <update_rate>100</update_rate>
-        <publish_rate>100</publish_rate>
-        <publish_odom>true</publish_odom>
-        <publish_odom_tf>${publish_tf}</publish_odom_tf>
-        <odometry_frame>odom</odometry_frame> <!-- TOF: was ${namespace}/odom -->
-        <robot_base_frame>base_footprint</robot_base_frame> <!-- TOF: was ${namespace}/base_footprint-->
+		<plugin name='gz-sim-mecanum-drive-system' filename="gz::sim::systems::MecanumDrive">
+		<topic>/robotnik_base_control/cmd_vel</topic>
+        <odom_topic>/robotnik_base_control/odom</odom_topic>
+		<publish_odom_tf>${publish_tf}</publish_odom_tf>
+        <frame_id>odom</frame_id> <!-- TOF: was ${namespace}/odom -->
+        <child_frame_id>base_footprint</child_frame_id> <!-- TOF: was ${namespace}/base_footprint-->
       </plugin>
 	  </gazebo>	
   </xacro:macro>
-
-  	<xacro:macro name="skid_steering" params="prefix publish_tf">
-		<gazebo>
-			<plugin name="skid_steering" filename="libgazebo_ros_planar_move.so">
-			<ros>
-				<remapping>cmd_vel:=/robotnik_base_control/cmd_vel</remapping>
-         		<remapping>odom:=/robotnik_base_control/odom</remapping>
-			<!-- <commandTopic>robotnik_base_control/cmd_vel</commandTopic> -->
-			<!-- <odometryTopic>robotnik_base_control/odom</odometryTopic> -->
-			</ros>
-			<odometryFrame>${prefix}odom</odometryFrame>
-			<odometryRate>50.0</odometryRate>
-			<robotBaseFrame>${prefix}base_footprint</robotBaseFrame>
-			<publishTF>${publish_tf}</publishTF>
-			<enableYAxis>false</enableYAxis>
-			</plugin>
-		</gazebo>
-  	</xacro:macro>
 
   <xacro:macro name="ros_force_based_move" params="publish_tf prefix">
 	  <gazebo>
