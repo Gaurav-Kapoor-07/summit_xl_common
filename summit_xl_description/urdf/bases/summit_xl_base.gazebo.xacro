@@ -18,7 +18,7 @@
 	<!-- skid steering plugin -->
 	<xacro:macro name="skid_steering" params="prefix publish_tf">
     <gazebo>
-	  <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+	  <plugin filename="ignition-gazebo-diff-drive-system" name="ignition::gazebo::systems::DiffDrive">
 		    <odom_publish_frequency>50.0</odom_publish_frequency>
 		    <left_joint>${prefix}front_left_wheel_joint</left_joint>
 		    <right_joint>${prefix}front_right_wheel_joint</right_joint>
@@ -37,7 +37,7 @@
 
   <xacro:macro name="omni_steering" params="namespace publish_tf">
 		<gazebo>
-		<plugin name='gz-sim-mecanum-drive-system' filename="gz::sim::systems::MecanumDrive">
+		<plugin name='ignition-gazebo-mecanum-drive-system' filename="ignition::gazebo::systems::MecanumDrive">
 		<topic>/robotnik_base_control/cmd_vel</topic>
         <odom_topic>/robotnik_base_control/odom</odom_topic>
 		<publish_odom_tf>${publish_tf}</publish_odom_tf>
