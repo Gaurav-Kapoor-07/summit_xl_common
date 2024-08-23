@@ -35,14 +35,23 @@
     </gazebo>
   </xacro:macro>
 
-  <xacro:macro name="omni_steering" params="namespace publish_tf">
+  <xacro:macro name="omni_steering" params="prefix publish_tf">
 		<gazebo>
-		<plugin name='ignition-gazebo-mecanum-drive-system' filename="ignition::gazebo::systems::MecanumDrive">
-		<topic>/robotnik_base_control/cmd_vel</topic>
-        <odom_topic>/robotnik_base_control/odom</odom_topic>
-		<publish_odom_tf>${publish_tf}</publish_odom_tf>
-        <frame_id>odom</frame_id> <!-- TOF: was ${namespace}/odom -->
-        <child_frame_id>base_footprint</child_frame_id> <!-- TOF: was ${namespace}/base_footprint-->
+		<plugin filename='ignition-gazebo-mecanum-drive-system' name="ignition::gazebo::systems::MecanumDrive">
+			<odom_publish_frequency>50.0</odom_publish_frequency>
+			<front_left_joint>${prefix}front_left_wheel_joint</front_left_joint>
+			<front_right_joint>${prefix}front_right_wheel_joint</front_right_joint>
+			<back_left_joint>${prefix}back_left_wheel_joint</back_left_joint>
+			<back_right_joint>${prefix}back_right_wheel_joint</back_right_joint>
+			<!-- https://www.roscomponents.com/en/mobile-robots/rb-steel -->
+			<wheel_separation>0.535</wheel_separation>
+			<wheelbase>0.43</wheelbase>
+			<wheel_radius>0.127</wheel_radius>
+			<topic>/robotnik_base_control/cmd_vel</topic>
+			<odom_topic>/robotnik_base_control/odom</odom_topic>
+			<tf_topic>${publish_tf}</tf_topic>
+			<frame_id>${prefix}odom</frame_id>
+			<child_frame_id>${prefix}base_footprint</child_frame_id> 
       </plugin>
 	  </gazebo>	
   </xacro:macro>
